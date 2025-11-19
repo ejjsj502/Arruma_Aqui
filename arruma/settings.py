@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-$iq=9^yeuq*v_1@yg4lfh#3$9&^xs%y4!#_$qu2&=n_4bf5xxm
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com','arruma-aqui.onrender.com']
 
 
 
@@ -137,5 +137,5 @@ if not DEBUG:
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-
+    SECURE_BROWSER_XSS_FILTER = True
 
