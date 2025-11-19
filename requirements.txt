@@ -10,8 +10,10 @@ whitenoise==6.6.0
 psycopg2-binary==2.9.9
 python-dotenv==1.0.0
 dj-database-url==0.5.0
-Pillow==10.1.0
+Pillow==10.1.0 ; sys_platform != "linux" or python_version < "3.13"
+Pillow==10.1.0 --only-binary=all ; sys_platform == "linux" and python_version >= "3.13"
 
 Faker==38.0.0
+
 
 
