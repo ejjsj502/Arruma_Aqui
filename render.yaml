@@ -4,7 +4,7 @@ services:
     env: python
     plan: free
     buildCommand: "./build.sh"
-    startCommand: "gunicorn arruma_aqui.wsgi:application"
+    startCommand: "gunicorn arruma.wsgi:application"  # ← Mude aqui
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -14,6 +14,8 @@ services:
         generateValue: true
       - key: WEB_CONCURRENCY
         value: 4
+      - key: DJANGO_SETTINGS_MODULE
+        value: arruma.settings  # ← Mude aqui
 
 databases:
   - name: arruma-aqui-db
