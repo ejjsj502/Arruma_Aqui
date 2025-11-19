@@ -1,10 +1,11 @@
-services:
+sservices:
   - type: web
     name: arruma-aqui
     env: python
     plan: free
+    pythonVersion: "3.11.9"  # ← FORÇA a versão aqui
     buildCommand: "./build.sh"
-    startCommand: "gunicorn arruma.wsgi:application"  # ← Mude aqui
+    startCommand: "gunicorn arruma.wsgi:application"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -14,8 +15,6 @@ services:
         generateValue: true
       - key: WEB_CONCURRENCY
         value: 4
-      - key: DJANGO_SETTINGS_MODULE
-        value: arruma.settings  # ← Mude aqui
 
 databases:
   - name: arruma-aqui-db
