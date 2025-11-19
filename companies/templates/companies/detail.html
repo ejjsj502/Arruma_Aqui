@@ -1,0 +1,341 @@
+{% extends 'base.html' %}
+
+{% block title %}{{company.user.name}} - Perfil{% endblock title %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Header Section -->
+    <div class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+        <div class="bg-gradient-to-r from-green-600 to-green-800 h-32 relative">
+            <!-- Cover Photo Placeholder -->
+        </div>
+        
+        <div class="px-6 pb-6 -mt-12 relative">
+            <div class="flex flex-col md:flex-row md:items-end">
+                <!-- Company Logo -->
+                <div class="w-32 h-32 rounded-full border-4 border-white bg-white shadow-lg overflow-hidden">
+                    {% if company.logoURL %}
+                    <img src="{{ company.logoURL }}" alt="{{ company.user.name }}" class="w-full h-full object-cover">
+                    {% else %}
+                    <div class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500 text-4xl">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Company Info -->
+                <div class="mt-4 md:mt-0 md:ml-6">
+                    <div class="flex items-center">
+                        <h1 class="text-3xl font-bold text-gray-800">{{ company.user.name }}</h1>
+                        <span class="ml-3 px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full">
+                            {{ company.job }}
+                        </span>
+                    </div>
+                    <div class="flex items-center mt-2 text-gray-600">
+                        <i class="fas fa-map-marker-alt text-green-600 mr-2"></i>
+                        <span>{{ company.city }}</span>
+                    </div>
+                    
+                    <!-- Avaliação Média -->
+                    <div class="flex items-center mt-2">
+                        <div class="flex items-center">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= company.average_rating %}
+                                    <i class="fas fa-star text-yellow-400"></i>
+                                {% else %}
+                                    <i class="far fa-star text-yellow-400"></i>
+                                {% endif %}
+                            {% endfor %}
+                            <span class="ml-2 text-gray-700 font-semibold">
+                                {{ company.average_rating|floatformat:1 }} ({{ company.total_reviews }} avaliações)
+                            </span>
+                        </div>
+                    </div>
+                    
+                    {% if company.tel %}
+                    <div class="flex items-center mt-1 text-gray-600">
+                        <i class="fas fa-phone-alt text-green-600 mr-2"></i>
+                        <span>{{ company.tel|stringformat:'s'|slice:':2' }} {{ company.tel|stringformat:'s'|slice:'2:7' }}-{{ company.tel|stringformat:'s'|slice:'7:' }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="mt-4 md:mt-0 md:ml-auto flex space-x-3">
+                    <a href="tel:{{ company.tel }}" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center">
+                        <i class="fas fa-phone-alt mr-2"></i> Ligar
+                    </a>
+
+
+                    {% if user == company.user %}
+                    <a href="/user/update_company_profile/{{ company.user.id }}/" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors flex items-center">
+                        <i class="fas fa-edit mr-2"></i> Editar Perfil
+                    </a>
+                   {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Left Column -->
+        <div class="lg:col-span-2 space-y-6">
+            <!-- About Section -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                    <i class="fas fa-info-circle text-green-600 mr-2"></i>
+                    Sobre
+                </h2>
+                <div class="prose max-w-none text-gray-600">
+                    <p>Empresa especializada em {{ company.job }} na cidade de {{ company.city }}. Entre em contato para mais informações sobre nossos serviços e orçamentos.</p>
+                </div>
+            </div>
+            
+            <!-- Services Section -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+
+
+                <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                    <i class="fas fa-tools text-green-600 mr-2"></i>
+                    Serviços Oferecidos
+                </h2>
+                <div class="space-y-2">
+
+
+
+                    {% if user.is_authenticated and user.is_client %}
+                        <a href="{% url 'companies:request_budget' company.user_id %}" 
+                        class="px-8 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors">
+                            Solicitar Orçamento
+                        </a>
+                    {% endif %}
+
+                    {% if user.is_authenticated and user.is_company %}
+                        <a href="{% url 'companies:budget_requests' %}" 
+                        class="px-8 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors">
+                            Orçamentos Recebidos
+                        </a>
+                    {% endif %}
+
+                    
+                    <div class="flex items-center p-3 bg-green-50 rounded-lg">
+                        <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                        <span>{{ company.job }} profissional</span>
+                    </div>
+                    <div class="flex items-center p-3 bg-green-50 rounded-lg">
+                        <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                        <span>Orçamento sem compromisso</span>
+                    </div>
+                    <div class="flex items-center p-3 bg-green-50 rounded-lg">
+                        <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                        <span>Atendimento em {{ company.city }} e região</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Avaliações Section -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+
+
+
+
+
+                {% for review in reviews %}
+                <div class="border border-gray-200 rounded-lg p-4 mb-4">
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <h4 class="font-semibold text-gray-800">{{ review.client.username }}</h4>
+                            <div class="flex items-center mt-1">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= review.rating %}
+                                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                                    {% else %}
+                                        <i class="far fa-star text-yellow-400 text-sm"></i>
+                                    {% endif %}
+                                {% endfor %}
+                                <span class="ml-2 text-gray-500 text-sm">{{ review.created_at|date:"d/m/Y" }}</span>
+                            </div>
+                        </div>
+                        {% if review.client == user %}
+                        <a href="{% url 'companies:delete_review' review.pk %}" 
+                        class="text-red-500 hover:text-red-700 text-sm"
+                        onclick="return confirm('Tem certeza que deseja excluir sua avaliação?')">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                            {% endif %}
+                        </div>
+                        <p class="text-gray-700 mb-3">{{ review.comment }}</p>
+                        
+                        <!-- RESPOSTA DA EMPRESA -->
+                        {% if review.company_response %}
+                        <div class="bg-green-50 border-l-4 border-green-500 p-3 mt-3">
+                            <div class="flex justify-between items-start mb-1">
+                                <strong class="text-green-800">Resposta da empresa:</strong>
+                                <span class="text-green-600 text-sm">{{ review.response_date|date:"d/m/Y H:i" }}</span>
+                            </div>
+                            <p class="text-green-700">{{ review.company_response }}</p>
+                            {% if user == company.user %}
+                            <div class="mt-2 space-x-2">
+                                <a href="{% url 'companies:edit_response' review.pk %}" 
+                                class="text-green-600 hover:text-green-800 text-sm">
+                                    <i class="fas fa-edit"></i> Editar
+                                </a>
+                                <a href="{% url 'companies:delete_response' review.pk %}" 
+                                class="text-red-600 hover:text-red-800 text-sm"
+                                onclick="return confirm('Tem certeza que deseja excluir esta resposta?')">
+                                    <i class="fas fa-trash"></i> Excluir
+                                </a>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% elif user == company.user %}
+                        <!-- BOTÃO PARA RESPONDER (apenas para dono da empresa) -->
+                        <div class="mt-3">
+                            <a href="{% url 'companies:respond_review' review.pk %}" 
+                            class="inline-flex items-center px-3 py-1 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors">
+                                <i class="fas fa-reply mr-1"></i> Responder
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                    <i class="fas fa-star text-yellow-400 mr-2"></i>
+                    Avaliações dos Clientes
+                    <span class="ml-2 text-gray-500 text-sm">({{ reviews.count }})</span>
+                </h2>
+
+                <!-- Formulário de Avaliação -->
+                {% if user.is_authenticated and user.is_client %}
+                <div class="mb-6 p-4 bg-gray-50 rounded-lg">
+                    <h3 class="text-lg font-medium text-gray-800 mb-3">
+                        {% if user_review %}Editar sua Avaliação{% else %}Deixe sua Avaliação{% endif %}
+                    </h3>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Sua Nota</label>
+                                {{ form.rating }}
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Seu Comentário</label>
+                                {{ form.comment }}
+                            </div>
+                            <div class="flex space-x-3">
+                                <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                                    {% if user_review %}Atualizar Avaliação{% else %}Enviar Avaliação{% endif %}
+                                </button>
+                                {% if user_review %}
+                                <a href="{% url 'companies:delete_review' user_review.pk %}" 
+                                   class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                                   onclick="return confirm('Tem certeza que deseja excluir sua avaliação?')">
+                                    Excluir Avaliação
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                {% elif user.is_authenticated and user.is_company %}
+                <div class="mb-6 p-4 bg-blue-50 rounded-lg">
+                    <p class="text-blue-700">Empresas não podem avaliar outras empresas.</p>
+                </div>
+                {% else %}
+                <div class="mb-6 p-4 bg-gray-50 rounded-lg">
+                    <p class="text-gray-700">
+                        <a href="{% url 'login' %}?next={{ request.path }}" class="text-green-600 hover:text-green-700 underline">
+                            Faça login como cliente
+                        </a> 
+                        para deixar uma avaliação.
+                    </p>
+                </div>
+                {% endif %}
+
+                <!-- Lista de Avaliações -->
+                {% if reviews %}
+                    <div class="space-y-4">
+                        {% for review in reviews %}
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">{{ review.client.username }}</h4>
+                                    <div class="flex items-center mt-1">
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= review.rating %}
+                                                <i class="fas fa-star text-yellow-400 text-sm"></i>
+                                            {% else %}
+                                                <i class="far fa-star text-yellow-400 text-sm"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                        <span class="ml-2 text-gray-500 text-sm">{{ review.created_at|date:"d/m/Y" }}</span>
+                                    </div>
+                                </div>
+                                {% if review.client == user %}
+                                <a href="{% url 'companies:delete_review' review.pk %}" 
+                                   class="text-red-500 hover:text-red-700 text-sm"
+                                   onclick="return confirm('Tem certeza que deseja excluir sua avaliação?')">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                                {% endif %}
+                            </div>
+                            <p class="text-gray-700">{{ review.comment }}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-8 bg-gray-50 rounded-lg">
+                        <i class="fas fa-star text-gray-300 text-4xl mb-3"></i>
+                        <p class="text-gray-500">Nenhuma avaliação ainda. Seja o primeiro a avaliar!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Right Column -->
+        <div class="space-y-6">
+            <!-- Contact Card -->
+            <div class="bg-white rounded-lg shadow-md p-6 sticky top-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Entre em Contato</h2>
+                <div class="space-y-4">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 bg-green-100 p-3 rounded-full text-green-600">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-500">Telefone</p>
+                            <p class="text-gray-900">{{ company.tel|stringformat:'s'|slice:':2' }} {{ company.tel|stringformat:'s'|slice:'2:7' }}-{{ company.tel|stringformat:'s'|slice:'7:' }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="pt-4 border-t border-gray-200">
+                        <a href="tel:{{ company.tel }}" class="block w-full text-center px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                            <i class="fas fa-phone-alt mr-2"></i> Ligar Agora
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Business Hours -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Horário de Atendimento</h2>
+                <ul class="space-y-2">
+                    <li class="flex justify-between">
+                        <span class="text-gray-600">Segunda - Sexta</span>
+                        <span class="font-medium">08:00 - 18:00</span>
+                    </li>
+                    <li class="flex justify-between">
+                        <span class="text-gray-600">Sábado</span>
+                        <span class="font-medium">08:00 - 12:00</span>
+                    </li>
+                    <li class="flex justify-between">
+                        <span class="text-gray-600">Domingo</span>
+                        <span class="text-rose-500">Fechado</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

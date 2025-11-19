@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if editing %}Editar Resposta{% else %}Responder Avaliação{% endif %}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 max-w-2xl">
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">
+            {% if editing %}Editar Resposta{% else %}Responder à Avaliação{% endif %}
+        </h1>
+        
+        <!-- Avaliação Original -->
+        <div class="bg-gray-50 rounded-lg p-4 mb-6">
+            <div class="flex justify-between items-start mb-2">
+                <h3 class="font-semibold text-gray-800">{{ review.client.username }}</h3>
+                <div class="flex items-center">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= review.rating %}
+                            <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        {% else %}
+                            <i class="far fa-star text-yellow-400 text-sm"></i>
+                        {% endif %}
+                    {% endfor %}
+                    <span class="ml-2 text-gray-500 text-sm">{{ review.created_at|date:"d/m/Y" }}</span>
+                </div>
+            </div>
+            <p class="text-gray-700">{{ review.comment }}</p>
+        </div>
+
+        <!-- Formulário de Resposta -->
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Sua Resposta
+                </label>
+                {{ form.company_response }}
+                {% if form.company_response.errors %}
+                    <div class="text-red-600 text-sm mt-1">
+                        {{ form.company_response.errors }}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="flex justify-between items-center">
+                <a href="{% url 'companies:detail' review.company.user_id %}" 
+                   class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                    Cancelar
+                </a>
+                <div class="space-x-3">
+                    {% if editing and review.company_response %}
+                    <a href="{% url 'companies:delete_response' review.pk %}" 
+                       class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                       onclick="return confirm('Tem certeza que deseja excluir esta resposta?')">
+                        Excluir Resposta
+                    </a>
+                    {% endif %}
+                    <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                        {% if editing %}Atualizar Resposta{% else %}Enviar Resposta{% endif %}
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

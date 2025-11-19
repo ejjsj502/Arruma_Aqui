@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}Denunciar Avaliação | Arruma Aqui{% endblock %}
+
+{% block extra_css %}
+<style>
+    .report-badge {
+        background: rgba(220, 38, 38, 0.1);
+        border: 1px solid rgba(220, 38, 38, 0.2);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="bg-slate-50 pb-16">
+    <section class="max-w-3xl mx-auto mt-10 mb-12 rounded-[36px] border border-slate-200 bg-white px-6 py-16 sm:px-10 shadow-lg space-y-6">
+        <span class="report-badge inline-flex px-4 py-1 rounded-full text-red-600 text-sm font-medium uppercase tracking-[0.3em]">Denunciar</span>
+        <h1 class="text-4xl sm:text-5xl font-semibold text-slate-900">Denunciar Avaliação</h1>
+        <p class="text-lg text-slate-600 max-w-3xl">Ajude-nos a manter a plataforma segura e respeitosa. Sua denúncia será analisada pela nossa equipe.</p>
+    </section>
+
+    <section class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="rounded-3xl bg-white border border-slate-200 p-8 shadow-sm space-y-6 mb-6">
+            <h2 class="text-xl font-semibold text-slate-900">Avaliação denunciada</h2>
+            <div class="bg-slate-50 rounded-lg p-4 space-y-3">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="font-medium text-slate-900">{{ review.client.username }}</p>
+                        <div class="flex items-center mt-1">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= review.rating %}
+                                    <i class="fas fa-star text-yellow-400 text-sm"></i>
+                                {% else %}
+                                    <i class="far fa-star text-yellow-400 text-sm"></i>
+                                {% endif %}
+                            {% endfor %}
+                            <span class="ml-2 text-slate-500 text-sm">{{ review.created_at|date:"d/m/Y" }}</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-slate-700">{{ review.comment }}</p>
+            </div>
+        </div>
+
+        <form method="post" class="rounded-3xl bg-white border border-slate-200 p-8 shadow-sm space-y-6">
+            {% csrf_token %}
+            
+            <div class="space-y-2">
+                <label for="{{ form.reason.id_for_label }}" class="block text-sm font-medium text-slate-900">
+                    {{ form.reason.label }} <span class="text-red-500">*</span>
+                </label>
+                {{ form.reason }}
+                {% if form.reason.errors %}
+                    <p class="text-sm text-red-600">{{ form.reason.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <div class="space-y-2">
+                <label for="{{ form.description.id_for_label }}" class="block text-sm font-medium text-slate-900">
+                    {{ form.description.label }}
+                </label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                    <p class="text-sm text-red-600">{{ form.description.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <div class="flex gap-4 pt-4">
+                <button type="submit" class="flex-1 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium">
+                    <i class="fas fa-flag mr-2"></i> Enviar Denúncia
+                </button>
+                <a href="{% url 'companies:detail' company.user_id %}" class="px-6 py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors font-medium">
+                    Cancelar
+                </a>
+            </div>
+        </form>
+    </section>
+</div>
+{% endblock content %}
+

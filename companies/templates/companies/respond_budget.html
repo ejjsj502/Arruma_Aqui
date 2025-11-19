@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+
+{% block title %}Responder Orçamento #{{ budget.id }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 max-w-2xl">
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">Responder Solicitação de Orçamento</h1>
+        
+        <!-- Resumo da Solicitação -->
+        <div class="bg-gray-50 rounded-lg p-4 mb-6">
+            <h3 class="font-semibold text-gray-800 mb-3">Solicitação do Cliente</h3>
+            <div class="space-y-3">
+                <div>
+                    <strong class="text-gray-700">Cliente:</strong>
+                    <span class="text-gray-600 ml-2">{{ budget.client.username }}</span>
+                </div>
+                <div>
+                    <strong class="text-gray-700">Descrição do serviço:</strong>
+                    <p class="text-gray-600 mt-1 bg-white p-3 rounded-lg">{{ budget.service_description }}</p>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <strong class="text-gray-700">Data desejada:</strong>
+                        <p class="text-gray-600">{{ budget.desired_date|date:"d/m/Y" }}</p>
+                    </div>
+                    <div>
+                        <strong class="text-gray-700">Urgência:</strong>
+                        <span class="px-2 py-1 rounded text-sm
+                            {% if budget.urgency == 'emergency' %}bg-red-100 text-red-800
+                            {% elif budget.urgency == 'high' %}bg-orange-100 text-orange-800
+                            {% elif budget.urgency == 'medium' %}bg-blue-100 text-blue-800
+                            {% else %}bg-green-100 text-green-800{% endif %}">
+                            {{ budget.get_urgency_display }}
+                        </span>
+                    </div>
+                </div>
+                {% if budget.photos %}
+                <div>
+                    <strong class="text-gray-700">Fotos anexadas:</strong>
+                    <img src="{{ budget.photos.url }}" alt="Foto do serviço" class="max-w-xs h-auto rounded-lg shadow-md mt-2">
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="space-y-6">
+                <!-- Status da Resposta -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-3">
+                        Sua Resposta *
+                    </label>
+                    <div class="space-y-3">
+                        <div class="flex items-center">
+                            <input type="radio" name="status" value="quoted" id="status_quoted" class="focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300" checked>
+                            <label for="status_quoted" class="ml-3 block text-sm font-medium text-green-700">
+                                Enviar Orçamento (propor preço)
+                            </label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" name="status" value="rejected" id="status_rejected" class="focus:ring-red-500 h-4 w-4 text-red-600 border-gray-300">
+                            <label for="status_rejected" class="ml-3 block text-sm font-medium text-red-700">
+                                Recusar Solicitação
+                            </label>
+                        </div>
+                    </div>
+                    {% if form.status.errors %}
+                        <div class="text-red-600 text-sm mt-1">
+                            {{ form.status.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Preço Proposto -->
+                <div id="price-field">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Preço Proposto (R$) *
+                    </label>
+                    <input type="number" name="proposed_price" 
+                           step="0.01" min="0" 
+                           placeholder="0.00"
+                           class="form-control w-full">
+                    <p class="text-gray-500 text-sm mt-1">Informe o valor do serviço</p>
+                    {% if form.proposed_price.errors %}
+                        <div class="text-red-600 text-sm mt-1">
+                            {{ form.proposed_price.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Resposta do Prestador -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Sua Mensagem para o Cliente *
+                    </label>
+                    <textarea name="company_response" rows="4" 
+                              placeholder="Digite sua resposta para o cliente. Explique o orçamento ou o motivo da recusa..."
+                              class="form-control w-full"></textarea>
+                    {% if form.company_response.errors %}
+                        <div class="text-red-600 text-sm mt-1">
+                            {{ form.company_response.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="flex justify-between items-center mt-8 pt-6 border-t border-gray-200">
+                <a href="{% url 'companies:budget_requests' %}" 
+                   class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                    Cancelar
+                </a>
+                <button type="submit" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                    <i class="fas fa-paper-plane mr-2"></i>Enviar Resposta
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const statusRadios = document.querySelectorAll('input[name="status"]');
+    const priceField = document.getElementById('price-field');
+    
+    function togglePriceField() {
+        const selectedStatus = document.querySelector('input[name="status"]:checked').value;
+        if (selectedStatus === 'quoted') {
+            priceField.style.display = 'block';
+        } else {
+            priceField.style.display = 'none';
+        }
+    }
+    
+    // Inicializar
+    togglePriceField();
+    
+    // Adicionar listeners
+    statusRadios.forEach(radio => {
+        radio.addEventListener('change', togglePriceField);
+    });
+});
+</script>
+{% endblock %}

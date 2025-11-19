@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load widget_tweaks %}
+<body>
+
+    <section>
+
+        <h2>Alteração de perfil</h2>
+      <div class="card-body">
+          <form action="{% url 'update_company_profile' %}" method="POST" novalidate>
+            {% csrf_token %}
+                {% for field in form.visible_fields %}
+                  <div class="form-group">
+                      {{ field.label_tag }}
+                        {% render_field field class="form-control" %}
+                          {% for error in field.errors %}
+                            <span style="color:red">{{ error }}</span>
+                          {% endfor %}
+                {% endfor %}
+                    <input type="submit" value="Register" class="btn btn-block btn-primary">
+                  </div>
+          </form>
+        </div>
+        
+    </section>
+
+</body>
+{% endblock content %}

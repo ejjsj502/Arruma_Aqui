@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block extra_css %}
+<style>
+.auth-hero{position:relative;padding:64px 0 96px;background:radial-gradient(circle at 10% 20%,rgba(1,171,1,.08),transparent 55%),radial-gradient(circle at 90% 0,rgba(0,166,153,.08),transparent 45%),linear-gradient(135deg,#f9fbf8,#f4f7f5);}
+.auth-hero__background{position:absolute;inset:0;pointer-events:none;}
+.auth-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:32px;background:#fff;border-radius:30px;padding:48px;box-shadow:0 35px 80px rgba(15,23,42,.15);}
+.auth-panel{border-radius:24px;padding:32px;background:rgba(255,255,255,.94);border:1px solid rgba(0,0,0,.04);backdrop-filter:blur(6px);}
+.auth-panel--highlight{background:linear-gradient(135deg,rgba(1,171,1,.15),rgba(0,166,153,.08));border-color:rgba(1,171,1,.2);}
+.auth-panel--form{background:#fff;}
+.auth-pill{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:999px;font-size:.9rem;font-weight:600;color:var(--secondary-color);background:rgba(1,171,1,.15);margin-bottom:16px;}
+.auth-panel h1{font-size:2.4rem;margin-bottom:16px;}
+.auth-lead{color:var(--text-light);font-size:1.05rem;margin-bottom:24px;}
+.auth-highlights{display:grid;gap:14px;margin-bottom:24px;}
+.auth-highlight{display:flex;gap:12px;padding:16px;border-radius:20px;background:rgba(255,255,255,.92);border:1px solid rgba(0,0,0,.04);}
+.auth-highlight__icon{width:48px;height:48px;border-radius:16px;background:rgba(1,171,1,.12);color:var(--secondary-color);display:flex;align-items:center;justify-content:center;font-size:1.2rem;}
+.auth-trust{display:flex;gap:16px;align-items:center;margin-bottom:20px;}
+.auth-avatars{display:flex;}
+.avatar{width:42px;height:42px;border-radius:50%;background:var(--secondary-color);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:600;border:3px solid #fff;margin-left:-12px;}
+.avatar:first-child{margin-left:0;}
+.auth-rating{margin:0;font-weight:600;}
+.auth-reference{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;color:var(--text-light);font-size:.92rem;}
+.auth-reference__logos{display:flex;gap:14px;flex-wrap:wrap;font-weight:600;color:var(--primary-color);}
+.auth-switch{color:var(--text-light);font-size:.95rem;}
+.auth-switch a{font-weight:600;color:var(--secondary-color);}
+.auth-tabs{display:inline-flex;border:1px solid var(--border-color);border-radius:999px;overflow:hidden;margin-bottom:24px;}
+.auth-tab{padding:10px 18px;font-weight:600;font-size:.95rem;color:var(--text-light);}
+.auth-tab.active{background:var(--secondary-color);color:#fff;}
+.auth-card__header{margin-bottom:20px;}
+.auth-card__header p{margin:0;color:var(--text-light);}
+.social-login{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:16px;}
+.social-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:14px;border:1px solid var(--border-color);padding:12px;font-weight:600;background:#fff;cursor:pointer;transition:var(--transition);}
+.social-button:hover{border-color:var(--secondary-color);transform:translateY(-2px);}
+.social-button--outline{background:rgba(0,0,0,.02);}
+.form-divider{position:relative;text-align:center;margin:12px 0 20px;}
+.form-divider::before,.form-divider::after{content:"";position:absolute;top:50%;width:40%;height:1px;background:var(--border-color);}
+.form-divider::before{left:0;}
+.form-divider::after{right:0;}
+.form-divider span{padding:0 12px;font-size:.9rem;color:var(--text-light);}
+.auth-form{display:flex;flex-direction:column;gap:16px;}
+.form-field label{font-weight:600;font-size:.95rem;margin-bottom:6px;color:var(--text-color);}
+.input-field{border:1px solid var(--border-color);border-radius:12px;padding:14px 16px;font-size:1rem;transition:var(--transition);background:#fff;}
+.input-field:focus{border-color:var(--secondary-color);box-shadow:0 0 0 3px rgba(1,171,1,.18);}
+.field-error{color:var(--error-color);font-size:.85rem;}
+.auth-alert{padding:12px 16px;border-radius:14px;font-size:.9rem;}
+.auth-alert.error{background:rgba(193,53,21,.08);border:1px solid rgba(193,53,21,.25);color:var(--error-color);}
+.form-meta{display:flex;justify-content:space-between;align-items:center;font-size:.9rem;color:var(--text-light);}
+.form-link{font-weight:600;color:var(--secondary-color);}
+.form-remember{display:flex;align-items:center;gap:8px;}
+.auth-actions{margin-top:4px;}
+.w-100{width:100%;}
+@media (max-width:900px){
+  .auth-grid{padding:32px;border-radius:24px;}
+  .auth-panel{padding:24px;}
+  .auth-panel h1{font-size:2rem;}
+  .auth-trust{flex-direction:column;align-items:flex-start;}
+}
+@media (max-width:640px){
+  .auth-grid{padding:24px;}
+  .social-login{grid-template-columns:1fr;}
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="auth-hero">
+    <div class="auth-hero__background" aria-hidden="true"></div>
+    <div class="auth-grid">
+        <div class="auth-panel auth-panel--highlight">
+            <p class="auth-pill">Profissionais verificados • Resposta em minutos</p>
+            <h1>Entre para continuar gerenciando seus pedidos no Arruma Aqui</h1>
+            <p class="auth-lead">
+                Acompanhe orçamentos, converse com empresas e finalize serviços sem sair da plataforma.
+            </p>
+
+            <div class="auth-highlights">
+                <div class="auth-highlight">
+                    <div class="auth-highlight__icon">
+                        <i class="fa-solid fa-shield-heart"></i>
+                    </div>
+                    <div>
+                        <strong>Segurança total</strong>
+                        <p>Validação de profissionais e histórico de serviços.</p>
+                    </div>
+                </div>
+                <div class="auth-highlight">
+                    <div class="auth-highlight__icon">
+                        <i class="fa-solid fa-gauge-high"></i>
+                    </div>
+                    <div>
+                        <strong>Agilidade real</strong>
+                        <p>Empresas respondem em até 15 minutos na média.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="auth-trust">
+                <div class="auth-avatars">
+                    <span class="avatar">MC</span>
+                    <span class="avatar">AL</span>
+                    <span class="avatar">JS</span>
+                    <span class="avatar">+4k</span>
+                </div>
+                <div>
+                    <p class="auth-rating">
+                        <i class="fa-solid fa-star"></i>
+                        4.9 de satisfação média
+                    </p>
+                    <small>Mais de 12.000 serviços concluídos este ano.</small>
+                </div>
+            </div>
+
+            <div class="auth-reference">
+                <span>Empresas destaque:</span>
+                <div class="auth-reference__logos" aria-hidden="true">
+                    <span>CleanPro</span>
+                    <span>FixNow</span>
+                    <span>Reforma+ </span>
+                </div>
+            </div>
+
+            <p class="auth-switch">
+                Novo aqui?
+                <a href="{% url 'register' %}">Crie uma conta gratuitamente</a>
+            </p>
+        </div>
+
+        <div class="auth-panel auth-panel--form">
+            <div class="auth-tabs">
+                <span class="auth-tab active">Entrar</span>
+                <a class="auth-tab" href="{% url 'register' %}">Quero me cadastrar</a>
+            </div>
+
+            <div class="auth-card__header">
+                <h2>Bem-vindo de volta</h2>
+                <p>Use seu e-mail e senha cadastrados para continuar</p>
+            </div>
+
+            <div class="social-login">
+                <button class="social-button">
+                    <i class="fa-brands fa-google"></i>
+                    Entrar com Google
+                </button>
+                <button class="social-button social-button--outline">
+                    <i class="fa-brands fa-linkedin"></i>
+                    Entrar com LinkedIn
+                </button>
+            </div>
+
+            <div class="form-divider">
+                <span>ou use seu e-mail</span>
+            </div>
+
+            <form action="{% url 'login' %}" method="POST" class="auth-form" novalidate>
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                <div class="auth-alert error">
+                    {% for error in form.non_field_errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if messages %}
+                <div class="auth-alert error">
+                    {% for message in messages %}
+                        <span>{{ message }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% for field in form.visible_fields %}
+                <div class="form-field">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {% render_field field class+="input-field" placeholder=field.label %}
+                    {% if field.errors %}
+                        <small class="field-error">
+                            {% for error in field.errors %}{{ error }}{% endfor %}
+                        </small>
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+                <div class="form-meta">
+                    <label class="form-remember">
+                        <input type="checkbox" disabled>
+                        Continuar conectado (em breve)
+                    </label>
+                    <a href="#" class="form-link">Esqueci minha senha</a>
+                </div>
+
+                <div class="auth-actions">
+                    <button type="submit" class="button primary w-100">Entrar e continuar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock content %}

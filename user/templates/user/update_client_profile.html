@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block content %}
+<style>
+    .profile-update-container {
+        max-width: 600px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+
+    .profile-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        padding: 2rem;
+        border: 1px solid #e5e7eb;
+    }
+
+    .profile-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .profile-title {
+        font-size: 1.875rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 0.5rem;
+    }
+
+    .profile-subtitle {
+        color: #6b7280;
+        font-size: 0.875rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        display: block;
+        font-weight: 500;
+        color: #374151;
+        margin-bottom: 0.5rem;
+        font-size: 0.875rem;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        transition: all 0.2s;
+        background-color: white;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: #10b981;
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+    }
+
+    .form-input:hover {
+        border-color: #9ca3af;
+    }
+
+    .error-message {
+        color: #dc2626;
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+        display: block;
+    }
+
+    .submit-btn {
+        width: 100%;
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        border: none;
+        padding: 0.875rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        margin-top: 1rem;
+    }
+
+    .submit-btn:hover {
+        background: linear-gradient(135deg, #059669, #047857);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .submit-btn:active {
+        transform: translateY(0);
+    }
+
+    .form-divider {
+        height: 1px;
+        background: #e5e7eb;
+        margin: 1.5rem 0;
+    }
+
+    .help-text {
+        color: #6b7280;
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+    }
+
+    .field-required {
+        color: #dc2626;
+    }
+
+    @media (max-width: 640px) {
+        .profile-card {
+            padding: 1.5rem;
+            margin: 1rem;
+        }
+        
+        .profile-title {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+
+<div class="profile-update-container">
+    <div class="profile-card">
+        <div class="profile-header">
+            <h1 class="profile-title">👤 Editar Meu Perfil</h1>
+            <p class="profile-subtitle">Atualize suas informações pessoais</p>
+        </div>
+
+        <form action="{% url 'update_client_profile' user.id %}" method="POST" novalidate>
+            {% csrf_token %}
+            
+            {% for field in form.visible_fields %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}" class="form-label">
+                    {{ field.label }}
+                    {% if field.field.required %}<span class="field-required">*</span>{% endif %}
+                </label>
+                
+                {% render_field field class="form-input" placeholder=field.label %}
+                
+                {% if field.help_text %}
+                <p class="help-text">{{ field.help_text }}</p>
+                {% endif %}
+                
+                {% for error in field.errors %}
+                <span class="error-message">
+                    ⚠️ {{ error }}
+                </span>
+                {% endfor %}
+            </div>
+            
+            {% if forloop.counter == 2 or forloop.counter == 4 %}
+            <div class="form-divider"></div>
+            {% endif %}
+            {% endfor %}
+
+            <div class="form-group">
+                <button type="submit" class="submit-btn">
+                    💾 Salvar Alterações
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}

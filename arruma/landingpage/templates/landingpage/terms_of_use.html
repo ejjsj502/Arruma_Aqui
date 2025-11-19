@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Termos de Uso | Arruma Aqui{% endblock %}
+
+{% block extra_css %}
+<style>
+    .terms-badge {
+        background: rgba(1, 171, 1, 0.1);
+        border: 1px solid rgba(1, 171, 1, 0.2);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="bg-slate-50 pb-16">
+    <section class="max-w-5xl mx-auto mt-10 mb-12 rounded-[36px] border border-slate-200 bg-white px-6 py-16 sm:px-10 shadow-lg space-y-6">
+        <span class="terms-badge inline-flex px-4 py-1 rounded-full text-secondary text-sm font-medium uppercase tracking-[0.3em]">Termos de uso</span>
+        <h1 class="text-4xl sm:text-5xl font-semibold text-slate-900">Transparência para quem contrata e para quem presta</h1>
+        <p class="text-lg text-slate-600 max-w-3xl">Ao usar o Arruma Aqui você concorda com as regras abaixo. Simplificamos os termos para que você saiba exatamente como seus dados e atividades são tratados.</p>
+    </section>
+
+    <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        <article class="rounded-3xl bg-white border border-slate-200 p-8 shadow-sm space-y-3">
+            <h2 class="text-2xl font-semibold text-slate-900">1. Conta e acesso</h2>
+            <p class="text-slate-600">Você deve fornecer informações verdadeiras e manter seus dados atualizados. O acesso é individual: não compartilhe sua senha.</p>
+        </article>
+        <article class="rounded-3xl bg-white border border-slate-200 p-8 shadow-sm space-y-3">
+            <h2 class="text-2xl font-semibold text-slate-900">2. Uso da plataforma</h2>
+            <p class="text-slate-600">Utilize o Arruma Aqui para encontrar ou oferecer serviços de forma honesta. Conteúdos ofensivos, fraudulentos ou ilegais podem ser removidos sem aviso.</p>
+        </article>
+        <article class="rounded-3xl bg-white border border-slate-200 p-8 shadow-sm space-y-3">
+            <h2 class="text-2xl font-semibold text-slate-900">3. Orçamentos e avaliações</h2>
+            <p class="text-slate-600">Ao solicitar ou aceitar um orçamento, você assume responsabilidade pelo acordo com o prestador. Avaliações devem refletir experiências reais e respeitosas.</p>
+        </article>
+        <article class="rounded-3xl bg-white border border-slate-200 p-8 shadow-sm space-y-3">
+            <h2 class="text-2xl font-semibold text-slate-900">4. Privacidade e dados</h2>
+            <p class="text-slate-600">Tratamos seus dados conforme a nossa Política de Privacidade. Você pode solicitar correção ou exclusão entrando em contato com nosso suporte.</p>
+        </article>
+        <article class="rounded-3xl bg-white border border-slate-200 p-8 shadow-sm space-y-3">
+            <h2 class="text-2xl font-semibold text-slate-900">5. Atualizações dos termos</h2>
+            <p class="text-slate-600">Sempre que os termos forem atualizados avisaremos por e-mail ou diretamente na plataforma. O uso contínuo significa concordância com as novas condições.</p>
+        </article>
+    </section>
+</div>
+{% endblock content %}
+

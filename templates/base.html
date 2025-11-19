@@ -1,0 +1,141 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}Arruma Aqui - Encontre os melhores serviços{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1A1A1A',
+                        secondary: '#01ab01',
+                        accent: '#00A699',
+                        highlight: '#FFB400',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <header id="cabecalho-principal">
+        <div class="header-container">
+            <a href="{% url 'index' %}" class="logo">
+                <img src="{% static 'logo1.png' %}" alt="Arruma Aqui" class="logo-img">
+                <span class="logo-text">Arruma Aqui</span>
+            </a>
+            
+            <nav id="navegacao-principal">
+                <ul class="nav-links">
+                    <li><a href="{% url 'companies:list' %}" class="nav-link">Explorar</a></li>
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'companies:budget_requests' %}" class="nav-link">Meus Orçamentos</a></li>
+                        {% if user.is_client %}
+                        <li><a href="{% url 'profile' user.id %}" class="nav-link">Minha Conta</a></li>
+                        {% else %}
+                        <li><a href="{% url 'companies:detail' user.id %}" class="nav-link">Meu Negócio</a></li>
+                        {% endif %}
+                        <li class="user-menu">
+                            <button class="user-button">
+                                <i class="fas fa-user-circle"></i>
+                                <span class="username">{{ user.first_name|default:user.username }}</span>
+                            </button>
+                            <div class="dropdown-menu">
+                                {% if user.is_client %}
+                                <a href="{% url 'profile' user.id %}" class="dropdown-item"><i class="fas fa-user"></i> Meu Perfil</a>
+                                {% else %}
+                                <a href="{% url 'companies:detail' user.id %}" class="dropdown-item"><i class="fas fa-user"></i> Meu Negócio</a>
+                                {% endif %}
+                                <a href="{% url 'logout' %}" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Sair</a>
+                            </div>
+                        </li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}" class="nav-link">Entrar</a></li>
+                        <li><a href="{% url 'register' %}" class="button primary">Cadastrar</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            
+            <button class="mobile-menu-button">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+    <main id="conteiner-principal">
+        {% block content %}
+        {% endblock content %}
+    </main>
+    
+    <footer id="rodape-principal">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Sobre</h3>
+                <p>Conectando você aos melhores serviços da sua região.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Links Rápidos</h3>
+                <ul>
+                    <li><a href="{% url 'companies:list' %}">Buscar Empresas</a></li>
+                    <li><a href="#">Como Funciona</a></li>
+                    <li><a href="#">Termos de Uso</a></li>
+                    <li><a href="#">Política de Privacidade</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contato</h3>
+                <p>Email: contato@arrumaaqui.com</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; {% now "Y" %} Arruma Aqui. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu-button').addEventListener('click', function() {
+            document.querySelector('nav#navegacao-principal').classList.toggle('active');
+        });
+
+        // User dropdown menu
+        const userButton = document.querySelector('.user-button');
+        if (userButton) {
+            userButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                this.closest('.user-menu').classList.toggle('active');
+            });
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function() {
+            const dropdowns = document.querySelectorAll('.user-menu');
+            dropdowns.forEach(dropdown => {
+                dropdown.classList.remove('active');
+            });
+        });
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

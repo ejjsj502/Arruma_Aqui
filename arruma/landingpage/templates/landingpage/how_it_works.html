@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Como Funciona | Arruma Aqui{% endblock %}
+
+{% block extra_css %}
+<style>
+    .how-it-works-badge {
+        background: rgba(1, 171, 1, 0.1);
+        border: 1px solid rgba(1, 171, 1, 0.2);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="bg-slate-50 pb-16">
+    <section class="max-w-5xl mx-auto mt-10 mb-12 rounded-[36px] border border-slate-200 bg-white px-6 py-16 sm:px-10 shadow-lg space-y-6">
+        <span class="how-it-works-badge inline-flex px-4 py-1 rounded-full text-secondary text-sm font-medium uppercase tracking-[0.3em]">Como funciona</span>
+        <h1 class="text-4xl sm:text-5xl font-semibold text-slate-900">Encontre profissionais confiáveis em minutos</h1>
+        <p class="text-lg text-slate-600 max-w-3xl">O Arruma Aqui conecta você às melhores empresas de serviços da sua região. Em três passos simples, você faz seu pedido, escolhe o profissional ideal e acompanha tudo em um só lugar.</p>
+    </section>
+
+    <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        <article class="rounded-3xl bg-white border border-slate-200 p-8 shadow-sm space-y-3">
+            <h2 class="text-2xl font-semibold text-slate-900">1. Conte o que precisa</h2>
+            <p class="text-slate-600">Descubra empresas filtrando por cidade, serviço ou avaliação. Veja fotos, avaliações reais e os diferenciais de cada prestador.</p>
+        </article>
+        <article class="rounded-3xl bg-white border border-slate-200 p-8 shadow-sm space-y-3">
+            <h2 class="text-2xl font-semibold text-slate-900">2. Compare opções</h2>
+            <p class="text-slate-600">Salve favoritos, solicite orçamentos e converse direto com a empresa pelo painel. Tudo organizado e seguro.</p>
+        </article>
+        <article class="rounded-3xl bg-white border border-slate-200 p-8 shadow-sm space-y-3">
+            <h2 class="text-2xl font-semibold text-slate-900">3. Feche com confiança</h2>
+            <p class="text-slate-600">Escolha a melhor proposta e acompanhe o andamento do serviço. Ao final, avalie o profissional para ajudar a comunidade.</p>
+        </article>
+        <article class="rounded-3xl bg-white border border-slate-200 p-8 shadow-sm space-y-3">
+            <h2 class="text-2xl font-semibold text-slate-900">4. Dúvidas frequentes</h2>
+            <p class="text-slate-600">Você pode alterar seus dados a qualquer momento em &ldquo;Minha Conta&rdquo;, solicitar novos orçamentos e acompanhar respostas direto pelo painel.</p>
+        </article>
+    </section>
+</div>
+{% endblock content %}
+
