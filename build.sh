@@ -1,15 +1,17 @@
 #!/usr/bin/env bash
-# Exit on error
 set -o errexit
 
-# Install dependencies
+echo "=== Instalando dependências ==="
 pip install -r requirements.txt
 
-# Run migrations
+echo "=== Verificando estrutura do projeto ==="
+ls -la
+find . -name "settings.py" -o -name "manage.py" | head -10
+
+echo "=== Executando migrações ==="
 python manage.py migrate
 
-# Create superuser if doesn't exist (opcional)
-echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'admin@example.com', 'admin') if not User.objects.filter(username='admin').exists() else None" | python manage.py shell
-
-# Collect static files
+echo "=== Coletando arquivos estáticos ==="
 python manage.py collectstatic --noinput
+
+echo "=== Build concluído com sucesso ==="
