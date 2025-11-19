@@ -1,17 +1,13 @@
 #!/usr/bin/env bash
 set -o errexit
 
-echo "=== Instalando dependências ==="
+pip install --upgrade pip
 pip install -r requirements.txt
 
-echo "=== Verificando estrutura do projeto ==="
-ls -la
-find . -name "settings.py" -o -name "manage.py" | head -10
+if [ -f "arruma/arruma/settings.py" ] && [ -f "arruma/settings.py" ]; then
+    rm -rf arruma/arruma/
+fi
 
-echo "=== Executando migrações ==="
 python manage.py migrate
-
-echo "=== Coletando arquivos estáticos ==="
 python manage.py collectstatic --noinput
-
-echo "=== Build concluído com sucesso ==="
+echo "Build OK"
