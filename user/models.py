@@ -18,7 +18,7 @@ class Client(models.Model):
 
 class Company(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE, primary_key = True)
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, default='Prestador')
     logoURL = models.URLField(max_length=300, null=True, blank=True)
     cnpj = models.IntegerField(default=0)
     tel = models.IntegerField(default=0)
