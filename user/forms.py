@@ -35,25 +35,22 @@ class CompanySignUpForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ['username', 'email', 'password1', 'password2']
 
     @transaction.atomic
-    def save(self, commit=True):  # ← ADICIONE O PARÂMETRO commit
+    def save(self):
         user = super().save(commit=False)
         user.is_company = True
-        
-        if commit:
-            user.save()
-            company = Company.objects.create(
-                user=user,
-                name=self.cleaned_data.get('name'),
-                tel=self.cleaned_data.get('tel'),
-                logoURL=self.cleaned_data.get('logoURL'),
-                cnpj=self.cleaned_data.get('cnpj'),
-                city=self.cleaned_data.get('city'),
-                job=self.cleaned_data.get('job')
-            )
+        user.name = self.cleaned_data.get('name')
+        user.save()
+        company = Company.objects.create(user=user)
+        company.tel=self.cleaned_data.get('tel')
+        company.logoURL=self.cleaned_data.get('logoURL')
+        company.cnpj=self.cleaned_data.get('cnpj')
+        company.city=self.cleaned_data.get('city')
+        company.job=self.cleaned_data.get('job')
+        company.save()
         return user
+
 
 class UpdateClientProfileForm(forms.ModelForm):
     class Meta:
