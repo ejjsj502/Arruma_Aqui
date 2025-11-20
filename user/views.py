@@ -27,22 +27,10 @@ class employee_register(CreateView):
     template_name = 'user/company_register.html'
 
     def form_valid(self, form):
-        try:
-            print("=== INICIANDO COMPANY REGISTER ===")
-            # Remove o commit=False - use o save normal
-            user = form.save()  # ← MUDE PARA save() SEM PARÂMETRO
-            print(f"User criado: {user.username}")
-            
-            login(self.request, user)
-            print("Login realizado com sucesso")
-            
-            return redirect('/')
-            
-        except Exception as e:
-            print(f"ERRO em employee_register: {e}")
-            import traceback
-            print(traceback.format_exc())
-            raise
+        user = form.save()
+        login(self.request, user)
+        return redirect('/')
+
 
 
 def login_request(request):
