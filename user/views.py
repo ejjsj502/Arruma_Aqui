@@ -27,9 +27,29 @@ class employee_register(CreateView):
     template_name = 'user/company_register.html'
 
     def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
-        return redirect('/')
+        try:
+            print("=== INICIANDO COMPANY REGISTER ===")
+            user = form.save(commit=False)
+            print(f"User criado: {user.username}, {user.email}")
+            
+            user.save()  # Salva o user primeiro
+            print("User salvo no banco")
+            
+            # Agora salva os relacionamentos ManyToMany se houver
+            form.save_m2m()
+            print("Relacionamentos salvos")
+            
+            login(self.request, user)
+            print("Login realizado com sucesso")
+            
+            return redirect('/')
+            
+        except Exception as e:
+            print(f"ERRO em employee_register: {e}")
+            import traceback
+            print(traceback.format_exc())
+            # Re-raise para ver no log
+            raise
 
 
 def login_request(request):
