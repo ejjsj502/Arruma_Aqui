@@ -29,15 +29,9 @@ class employee_register(CreateView):
     def form_valid(self, form):
         try:
             print("=== INICIANDO COMPANY REGISTER ===")
-            user = form.save(commit=False)
-            print(f"User criado: {user.username}, {user.email}")
-            
-            user.save()  # Salva o user primeiro
-            print("User salvo no banco")
-            
-            # Agora salva os relacionamentos ManyToMany se houver
-            form.save_m2m()
-            print("Relacionamentos salvos")
+            # Remove o commit=False - use o save normal
+            user = form.save()  # ← MUDE PARA save() SEM PARÂMETRO
+            print(f"User criado: {user.username}")
             
             login(self.request, user)
             print("Login realizado com sucesso")
@@ -48,7 +42,6 @@ class employee_register(CreateView):
             print(f"ERRO em employee_register: {e}")
             import traceback
             print(traceback.format_exc())
-            # Re-raise para ver no log
             raise
 
 
