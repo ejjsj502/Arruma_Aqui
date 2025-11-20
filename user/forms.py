@@ -26,7 +26,7 @@ class ClientSignUpForm(UserCreationForm):
         return user
 
 class CompanySignUpForm(UserCreationForm):
-    name = forms.CharField(required=True)
+    name = forms.CharField(required=True)  # Este é para a Company, não User
     logoURL = forms.CharField(required=True)
     cnpj = forms.CharField(required=True)
     tel = forms.CharField(required=True)
@@ -35,20 +35,24 @@ class CompanySignUpForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
         model = User
+        fields = ['username', 'email', 'password1', 'password2']  # ← Especifique os campos do User
 
     @transaction.atomic
     def save(self):
         user = super().save(commit=False)
         user.is_company = True
-        user.name = self.cleaned_data.get('name')
-        user.save()
-        company = Company.objects.create(user=user)
-        company.tel=self.cleaned_data.get('tel')
-        company.logoURL=self.cleaned_data.get('logoURL')
-        company.cnpj=self.cleaned_data.get('cnpj')
-        company.city=self.cleaned_data.get('city')
-        company.job=self.cleaned_data.get('job')
-        company.save()
+        user.save()  # ← Salva apenas campos do User
+        
+        # Agora cria a Company com os dados específicos
+        company = Company.objects.create(
+            user=user,
+            name=self.cleaned_data.get('name'),  # ← Salva no Company, não User
+            tel=self.cleaned_data.get('tel'),
+            logoURL=self.cleaned_data.get('logoURL'),
+            cnpj=self.cleaned_data.get('cnpj'),
+            city=self.cleaned_data.get('city'),
+            job=self.cleaned_data.get('job')
+        )
         return user
 
 class UpdateClientProfileForm(forms.ModelForm):
