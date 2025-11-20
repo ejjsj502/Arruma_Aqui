@@ -1,9 +1,9 @@
-sservices:
+services:
   - type: web
     name: arruma-aqui
     env: python
     plan: free
-    pythonVersion: "3.11.9"  # ← FORÇA a versão aqui
+    pythonVersion: "3.11.9"
     buildCommand: "./build.sh"
     startCommand: "gunicorn arruma.wsgi:application"
     envVars:
@@ -14,7 +14,7 @@ sservices:
       - key: SECRET_KEY
         generateValue: true
       - key: WEB_CONCURRENCY
-        value: 4
+        value: "4"
 
 databases:
   - name: arruma-aqui-db
